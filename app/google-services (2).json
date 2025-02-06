@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "710114159296",
+    "project_id": "stavshalom-9e9ab",
+    "storage_bucket": "stavshalom-9e9ab.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:710114159296:android:79b8488506f49488491b25",
+        "android_client_info": {
+          "package_name": "com.example.afinal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAafxZfrMo2WVkKRFgR4DJ2dJhUQ5RfgTM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:710114159296:android:576d2a497f95b448491b25",
+        "android_client_info": {
+          "package_name": "com.example.gmar"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAafxZfrMo2WVkKRFgR4DJ2dJhUQ5RfgTM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
