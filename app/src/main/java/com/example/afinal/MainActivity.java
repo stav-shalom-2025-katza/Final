@@ -8,7 +8,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private Button loginButton, signUpButton;
 
@@ -21,9 +21,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // אפשר כפתור פעולה בתור כפתור "החזור"
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true); // מאפשר כפתור בחזרה בצד שמאל
-
         // קישור לכפתורי התחברות והרשמה
         loginButton = findViewById(R.id.login_button);
         signUpButton = findViewById(R.id.sign_up_button);
@@ -34,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // כפתור להרשמה (Sign In)
+        // כפתור להרשמה (Sign Up)
         signUpButton.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
             startActivity(intent);
@@ -53,34 +50,21 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
 
-        if (itemId == R.id.new_order) {
-            // מעבר למסך של הזמנה חדשה
-            Intent intentNewOrder = new Intent(MainActivity.this, NewOrderActivity.class);
-            startActivity(intentNewOrder);
+        if (itemId == R.id.results_board) {
+            startActivity(new Intent(this, ResultsBoardActivity.class));
             return true;
-        } else if (itemId == R.id.product_inventory) {
-            // מעבר למסך של מלאי המוצרים
-            Intent intentInventory = new Intent(MainActivity.this, ProductInventoryActivity.class);
-            startActivity(intentInventory);
+        } else if (itemId == R.id.match_schedule) {
+            startActivity(new Intent(this, MatchScheduleActivity.class));
             return true;
-        } else if (itemId == R.id.shopping_cart) {
-            // מעבר למסך של סל הקניות
-            Intent intentCart = new Intent(MainActivity.this, ShoppingCartActivity.class);
-            startActivity(intentCart);
+        } else if (itemId == R.id.league_table) {
+            startActivity(new Intent(this, LeagueTableActivity.class));
             return true;
-        } else if (itemId == R.id.contact_us) {
-            // מעבר למסך צור קשר
-            Intent intentContact = new Intent(MainActivity.this, ContactUsActivity.class);
-            startActivity(intentContact);
+        } else if (itemId == R.id.katznelson_school) {
+            startActivity(new Intent(this, KatznelsonSchoolActivity.class));
             return true;
+
         } else if (itemId == R.id.about_us) {
-            // מעבר למסך אודות
-            Intent intentAbout = new Intent(MainActivity.this, AboutUsActivity.class);
-            startActivity(intentAbout);
-            return true;
-        } else if (itemId == android.R.id.home) {
-            // פעולת כפתור החזרה
-            onBackPressed();
+            startActivity(new Intent(this, AboutUsActivity.class));
             return true;
         }
 

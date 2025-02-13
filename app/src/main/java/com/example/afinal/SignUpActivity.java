@@ -2,73 +2,77 @@ package com.example.afinal;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;  // Import this
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-public class SignUpActivity extends BaseActivity {
+public class SignUpActivity extends AppCompatActivity {
 
     private EditText emailEditText, passwordEditText, confirmPasswordEditText;
     private Button signUpButton;
-    private TextView switchToLogin;
+    private UserDatabaseHelper dbHelper; // מחלקת מסד הנתונים
+
+    // סיסמת המנהל הקבועה
+    private static final String ADMIN_PASSWORD = "idan2709";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up); // קישור לקובץ ה-XML
+        setContentView(R.layout.activity_sign_up);
 
-        // קישור רכיבי ה-UI
         emailEditText = findViewById(R.id.signup_email);
         passwordEditText = findViewById(R.id.signup_password);
         confirmPasswordEditText = findViewById(R.id.signup_confirm_password);
         signUpButton = findViewById(R.id.signup_button);
-        switchToLogin = findViewById(R.id.switch_to_login);
 
-        // מאזין ללחיצה על כפתור ההרשמה
+        dbHelper = new UserDatabaseHelper(this); // אתחול מסד הנתונים
+
         signUpButton.setOnClickListener(v -> {
             String email = emailEditText.getText().toString().trim();
             String password = passwordEditText.getText().toString().trim();
             String confirmPassword = confirmPasswordEditText.getText().toString().trim();
 
-            if (!password.equals(confirmPassword)) {
-                Toast.makeText(this, "Passwords do not match!", Toast.LENGTH_SHORT).show();
-                return;
+            if (validateInputs(email, password, confirmPassword)) {
+                boolean isAdmin = password.equals(ADMIN_PASSWORD); // בודק אם הסיסמה של המנהל
+
+                if (dbHelper.addUser(email, password, isAdmin)) { // הוספת משתמש למסד הנתונים
+                    Toast.makeText(SignUpActivity.this, "נרשמת בהצלחה!", Toast.LENGTH_SHORT).show();
+
+                    // אם זה המנהל, נעביר אותו למסך הניהול
+                    if (isAdmin) {
+                        Intent intent = new Intent(SignUpActivity.this, AdminDashboardActivity.class);
+                        startActivity(intent);
+                    } else {
+                        // אם זה לא המנהל, נעביר למסך About Us
+                        Intent intent = new Intent(SignUpActivity.this, AboutUsActivity.class);
+                        startActivity(intent);
+                    }
+                    finish(); // סגירת מסך ההרשמה
+                } else {
+                    Toast.makeText(SignUpActivity.this, "האימייל כבר קיים במערכת!", Toast.LENGTH_SHORT).show();
+                }
             }
-
-            // כאן ניתן להוסיף חיבור ל-Firebase להרשמה
-            signUpUser(email, password);
-        });
-
-        // מעבר למסך ההתחברות
-        switchToLogin.setOnClickListener(v -> {
-            Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
-            startActivity(intent);
-        });
-
-        // הסתרת מקלדת אוטומטית בעת לחיצה מחוץ לשדה טקסט
-        setupKeyboardHiding(findViewById(R.id.signup_button));
-    }
-
-    // פונקציה להסרת מקלדת כאשר היא לא נדרשת
-    private void setupKeyboardHiding(View rootView) {
-        ViewCompat.setOnApplyWindowInsetsListener(rootView, (v, insets) -> {
-            boolean isKeyboardVisible = insets.isVisible(WindowInsetsCompat.Type.ime());
-            if (!isKeyboardVisible) {
-                rootView.clearFocus();
-            }
-            return insets;
         });
     }
 
-    // פונקציה להרשמה (לדוגמה: חיבור ל-Firebase)
-    private void signUpUser(String email, String password) {
-        // כאן ניתן להוסיף חיבור ל-Firebase או לשרת
-        Toast.makeText(this, "Signing up with email: " + email, Toast.LENGTH_SHORT).show();
+    // פונקציה לבדיקת תקינות הקלט
+    private boolean validateInputs(String email, String password, String confirmPassword) {
+        if (email.isEmpty()) {
+            emailEditText.setError("יש להזין אימייל");
+            emailEditText.requestFocus();
+            return false;
+        }
+        if (password.isEmpty()) {
+            passwordEditText.setError("יש להזין סיסמה");
+            passwordEditText.requestFocus();
+            return false;
+        }
+        if (!password.equals(confirmPassword)) {
+            confirmPasswordEditText.setError("הסיסמאות אינן תואמות");
+            confirmPasswordEditText.requestFocus();
+            return false;
+        }
+        return true;
     }
 }
